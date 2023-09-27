@@ -3,11 +3,10 @@ Functionality of authorization
 """
 
 import re
-# import requests
+import requests
 
 
 LINK = 'https://chill.services/api/account/proj/'
-
 
 
 def check_phone(cont):
@@ -47,3 +46,24 @@ def detect_type(login):
         return 'mail'
 
     return 'login'
+
+def auth(
+    request: dict,
+    data: dict,
+    by: str,
+    online: bool = False,
+    password: bool = False,
+    image: str = None,
+):
+    """ Auth """
+
+    res = requests.post(LINK, json={
+        'request': request,
+        'data': data,
+        'by': by,
+        'online': online,
+        'password': password,
+        'image': image,
+    }).json()
+
+    return res['user'], res['token'], res['new']
