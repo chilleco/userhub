@@ -48,22 +48,45 @@ def detect_type(login):
     return 'login'
 
 def auth(
-    request: dict,
-    data: dict,
     by: str,
-    online: bool = False,
-    password: bool = False,
+    token: str,
+    network: int = 0,
+    ip: str = None,
+    locale: str = 'en',
+    project: str = None,
+    login: str = None,
+    social: int = None,
+    user: str = None,
+    password: str = None,
+    name: str = None,
+    surname: str = None,
     image: str = None,
+    mail: str = None,
+    utm: str = None,
+    online: bool = False,
+    check_password: bool = False,
 ):
     """ Auth """
 
-    res = requests.post(LINK, json={
-        'request': request,
-        'data': data,
+    req = {
         'by': by,
-        'online': online,
+        'token': token,
+        'network': network,
+        'ip': ip,
+        'locale': locale,
+        'project': project,
+        'login': login,
+        'social': social,
+        'user': user,
         'password': password,
+        'name': name,
+        'surname': surname,
         'image': image,
-    }).json()
+        'mail': mail,
+        'utm': utm,
+        'online': online,
+        'check_password': check_password,
+    }
 
+    res = requests.post(LINK, json=req).json()
     return res['user'], res['token'], res['new']
