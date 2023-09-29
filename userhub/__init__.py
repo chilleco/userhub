@@ -5,7 +5,7 @@ Initializing the Python package
 from .main import detect_type, auth
 
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 __all__ = (
     '__version__',

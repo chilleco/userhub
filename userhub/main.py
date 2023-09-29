@@ -3,11 +3,16 @@ Functionality of authorization
 """
 
 import re
-import requests
+import aiohttp
 
 
 LINK = 'https://chill.services/api/account/proj/'
 
+
+async def fetch(url, payload):
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=payload) as response:
+            return await response.json()
 
 def check_phone(cont):
     """ Phone checking """
@@ -47,7 +52,7 @@ def detect_type(login):
 
     return 'login'
 
-def auth(
+async def auth(
     by: str,
     token: str,
     network: int = 0,
@@ -88,5 +93,5 @@ def auth(
         'check_password': check_password,
     }
 
-    res = requests.post(LINK, json=req).json()
+    res = await fetch(LINK, req)
     return res['user'], res['token'], res['new']

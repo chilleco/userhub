@@ -48,7 +48,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     python_requires='>=3.7, <4',
     install_requires=[
-        'requests',  # Because of conflicts with main repo
+        'aiohttp',  # Because of conflicts with main repo
     ],
     project_urls={
         'Source': 'https://github.com/chilleco/userhub',
