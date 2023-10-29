@@ -93,7 +93,7 @@ async def auth(
         'check_password': check_password,
     }
 
-    res = await fetch(LINK + 'account/proj_token/', req)
+    res = await fetch(LINK + 'account/proj/', req)
     return res['user'], res['token'], res['new']
 
 async def token(
@@ -122,5 +122,5 @@ async def token(
         'project': project,
     }
 
-    res = await fetch(LINK + 'account/token/', req)
+    res = await fetch(LINK + 'account/proj_token/', req)
     return res['token'], res['user'], res['status']
