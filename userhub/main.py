@@ -6,7 +6,7 @@ import re
 import aiohttp
 
 
-LINK = 'https://chill.services/api/account/proj/'
+LINK = 'https://chill.services/api/'
 
 
 async def fetch(url, payload):
@@ -53,12 +53,12 @@ def detect_type(login):
     return 'login'
 
 async def auth(
+    project: str,
     by: str,
     token: str,
     network: int = 0,
     ip: str = None,
     locale: str = 'en',
-    project: str = None,
     login: str = None,
     social: int = None,
     user: str = None,
@@ -93,5 +93,34 @@ async def auth(
         'check_password': check_password,
     }
 
-    res = await fetch(LINK, req)
+    res = await fetch(LINK + 'account/proj_token/', req)
     return res['user'], res['token'], res['new']
+
+async def token(
+    project: str,
+    token: str,
+    network: int = 0,
+    utm: str = None,
+    extra: dict = None,
+    ip: str = None,
+    locale: str = 'en',
+    user_agent: str = None,
+):
+    """ Save token """
+
+    if extra is None:
+        extra = {}
+
+    req = {
+        'token': token,
+        'network': network,
+        'utm': utm,
+        'extra': extra,
+        'ip': ip,
+        'locale': locale,
+        'user_agent': user_agent,
+        'project': project,
+    }
+
+    res = await fetch(LINK + 'account/token/', req)
+    return res['token'], res['user'], res['status']
