@@ -97,6 +97,9 @@ async def auth(
     }
 
     res = await fetch(LINK + 'account/proj/', req)
+    if isinstance(res, str):
+        print(res)
+        return 0, token, False
     return res['user'], res['token'], res['new']
 
 async def token(
