@@ -1,1 +1,2 @@
-aiohttp==3.8.5
+libdev==0.82
+consys==0.31

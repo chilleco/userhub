@@ -2,28 +2,29 @@
 Functionality of working with users
 """
 
-from ._req import fetch
+from libdev.req import fetch
+from libdev.log import log
 
 
-LINK = 'https://chill.services/api/'
+LINK = "https://chill.services/api/"
 
 
 async def get(
     token: str,
     data: dict = None,
 ):
-    """ Get """
+    """Get"""
 
     if data is None:
         data = {}
 
     req = {
-        'token': token,
+        "token": token,
         **data,
     }
 
-    res = await fetch(LINK + 'users/get/', req)
-    if isinstance(res, str):
-        print(res)
+    code, res = await fetch(LINK + "users/get/", req)
+    if code != 200:
+        log.error(f"{code}: {res}")
         return res
     return res
