@@ -1,4 +1,6 @@
 from libdev.cfg import cfg
+from libdev.req import fetch
+from libdev.log import log
 from consys import Attribute  # make_base
 from consys.handlers import (
     default_login,
@@ -17,6 +19,9 @@ from consys.handlers import (
 )
 
 
+LINK = "https://chill.services/api/"
+
+
 # Base = make_base(
 #     host=cfg("mongo.host") or "db",
 #     name=cfg("PROJECT_NAME"),
@@ -25,8 +30,9 @@ from consys.handlers import (
 # )
 
 
-class User:  # Base
-    # _name = "users"
+class BaseUser:  # User(Base)
+    _name = "users"
+    _token = None
 
     # status:
     # 0 - deleted
@@ -115,3 +121,33 @@ class User:  # Base
                     "locale": i.get("locale") or cfg("locale", "en"),
                 }
         return None
+
+    def __init__(self, token=None, **kwargs):
+        self._token = token
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+        return self
+
+    @classmethod
+    async def get(
+        cls,
+        token: str,
+        data: dict = None,
+    ):
+        if data is None:
+            data = {}
+
+        req = {
+            "token": token,
+            **data,
+        }
+
+        code, res = await fetch(LINK + "users/get/", req)
+        if code != 200 or not isinstance(res, dict) or "users" not in res:
+            log.error(f"{code}: {res}")
+            return None
+        users = res["users"]
+
+        if isinstance(users, dict):
+            return cls(token, **users)
+        return [cls(token, **user) for user in users]
