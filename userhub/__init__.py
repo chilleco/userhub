@@ -6,7 +6,7 @@ from .auth import detect_type, auth, token
 from .model import BaseUser
 
 
-__version__ = "0.12"
+__version__ = "0.13"
 
 __all__ = (
     "__version__",

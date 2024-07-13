@@ -132,22 +132,29 @@ class BaseUser:  # User(Base)
     async def get(
         cls,
         token: str,
-        data: dict = None,
+        **kwargs,
     ):
-        if data is None:
-            data = {}
+        code, res = await fetch(LINK + "users/get/", {"token": token, **kwargs})
 
-        req = {
-            "token": token,
-            **data,
-        }
-
-        code, res = await fetch(LINK + "users/get/", req)
         if code != 200 or not isinstance(res, dict) or "users" not in res:
             log.error(f"{code}: {res}")
-            return None
+            return str(res)
         users = res["users"]
 
         if isinstance(users, dict):
             return cls(token, **users)
         return [cls(token, **user) for user in users]
+
+    @classmethod
+    async def complex(
+        cls,
+        token: str,
+        **kwargs,
+    ):
+        code, res = await fetch(LINK + "users/get/", {"token": token, **kwargs})
+
+        if code != 200 or not isinstance(res, dict) or "users" not in res:
+            log.error(f"{code}: {res}")
+            return str(res)
+        users = res["users"]
+        return users
