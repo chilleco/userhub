@@ -7,8 +7,8 @@ from consys.handlers import (
     check_login_uniq,
     check_password,
     process_password,
+    pre_process_name,
     check_name,
-    check_surname,
     check_phone_uniq,
     pre_process_phone,
     check_mail_uniq,
@@ -59,12 +59,14 @@ class BaseUser:  # User(Base)
     # Personal
     name = Attribute(
         types=str,
+        pre_processing=pre_process_name,
         checking=check_name,
         processing=process_title,
     )
     surname = Attribute(
         types=str,
-        checking=check_surname,
+        pre_processing=pre_process_name,
+        checking=check_name,
         processing=process_title,
     )
     title = Attribute(
