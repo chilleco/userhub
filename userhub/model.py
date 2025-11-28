@@ -1,3 +1,7 @@
+"""
+Data model reflecting the Chill Services user schema returned by the platform.
+"""
+
 from libdev.cfg import cfg
 from libdev.req import fetch
 from libdev.log import log
@@ -31,6 +35,13 @@ LINK = "https://chill.services/api/"
 
 
 class BaseUser:  # User(Base)
+    """Lightweight container for user data fetched from the platform.
+
+    Instances are populated from API responses; no local persistence is opened.
+    Status codes are issued by the platform (0 deleted, 1 blocked, 2 unauthorized,
+    3 authorized, 4 platform access, 5 supervisor, 6 moderator, 7 admin, 8 owner).
+    """
+
     _name = "users"
     _token = None
 
@@ -114,7 +125,7 @@ class BaseUser:  # User(Base)
     # TODO: del Base.user
 
     def get_social(self, social):
-        """Get user social info by social ID"""
+        """Return social info dict by social ID from self.social or None."""
         for i in self.social:
             if i["id"] == social:
                 return {
@@ -125,6 +136,7 @@ class BaseUser:  # User(Base)
         return None
 
     def __init__(self, token=None, **kwargs):
+        """Initialize with issued token and arbitrary user fields."""
         self._token = token
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -136,6 +148,7 @@ class BaseUser:  # User(Base)
         token: str,
         **kwargs,
     ):
+        """Fetch user(s) from the platform; return BaseUser or list of BaseUser."""
         code, res = await fetch(LINK + "users/get/", {"token": token, **kwargs})
 
         if code != 200 or not isinstance(res, dict) or "users" not in res:
@@ -153,6 +166,7 @@ class BaseUser:  # User(Base)
         token: str,
         **kwargs,
     ):
+        """Fetch raw user payload from the platform without wrapping into objects."""
         code, res = await fetch(LINK + "users/get/", {"token": token, **kwargs})
 
         if code != 200 or not isinstance(res, dict) or "users" not in res:

@@ -1,5 +1,5 @@
 """
-Initializing the Python package
+Public exports for the UserHub async client to the Chill Services platform.
 """
 
 from .auth import detect_type, auth, token
