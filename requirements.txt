@@ -1,2 +1,0 @@
-libdev==0.82
-consys==0.31
