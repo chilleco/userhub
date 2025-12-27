@@ -109,6 +109,7 @@ class BaseUser:  # User(Base)
     discount = Attribute(types=float)
     balance = Attribute(types=int, default=0)
     subscription = Attribute(types=int, default=0)
+    link = Attribute(types=str)  # Referral link
     utm = Attribute(types=str)  # Source
     pay = Attribute(types=list)  # Saved data for payment
     # Permissions
